@@ -3,7 +3,7 @@ from math import log
 import polars as pl
 import numpy as np
 
-def matching_procedure(treat: pl.DataFrame, control: pl.DataFrame, count: int):
+def matching_procedure(treat: pl.DataFrame, control: pl.DataFrame, count: int, event_timestep: int):
     """
     Matches elements of control group to elements of treatment group
     based on the path of the outcome variable being measured.
@@ -11,7 +11,7 @@ def matching_procedure(treat: pl.DataFrame, control: pl.DataFrame, count: int):
        control: DataFrame of control group and time-series data
        treat: DataFrame of treatment group and time-series data
        count: number of matches per treatment variable
-
+       event_timestep: timestep where the event occurs
     Returns:
         matches: dict object of treatment group and control matches ranked by correlation,
         contains only one match if singleton=True
@@ -19,9 +19,9 @@ def matching_procedure(treat: pl.DataFrame, control: pl.DataFrame, count: int):
     if control.shape[1] > count:
         raise ValueError("Number of matches requested exceeds elements in control group")
     t_cols = treat.columns
-    df = treat + control
-
-    # evaluate Y_i,t and set up new data frame (D.3a-c), (D.4a,c)
+    df = pl.concat([treat, control], how="horizontal")
+    df = df.head(event_timestep)
+    df = df.select([pl.all().log()])
 
     matches = {}
     for i, _ in enumerate(t_cols):
