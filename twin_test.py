@@ -14,4 +14,5 @@ test_frame_2 = pl.DataFrame({
     "col7": [3, 6, 4, 4, 4, 14, 21],
 })
 
-print(twin.matching_procedure(test_frame, test_frame_2, 2, False))
+if __name__ == "__main__":
+    print(twin.matching_procedure(test_frame, test_frame_2, 2, False))
