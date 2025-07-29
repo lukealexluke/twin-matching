@@ -15,4 +15,4 @@ test_frame_2 = pl.DataFrame({
 })
 
 if __name__ == "__main__":
-    print(twin.matching_procedure(test_frame, test_frame_2, 2, False))
+    print(twin.matching_procedure(test_frame, test_frame_2, False, None, 2))
